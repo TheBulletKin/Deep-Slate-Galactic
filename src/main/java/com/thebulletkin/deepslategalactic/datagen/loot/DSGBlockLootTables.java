@@ -17,7 +17,7 @@ public class DSGBlockLootTables extends BlockLootSubProvider{
 
         @Override
         protected void generate() {
-
+            this.dropSelf(DSGBlocks.ZIPLINE_PILLAR.get());
         }
 
         @Override

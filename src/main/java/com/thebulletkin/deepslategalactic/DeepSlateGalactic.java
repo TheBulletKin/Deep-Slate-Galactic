@@ -52,8 +52,9 @@ public class DeepSlateGalactic
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
 
-        DSGItems.register(modEventBus);
         DSGBlocks.register(modEventBus);
+        DSGItems.register(modEventBus);
+
         DSGCreativeModeTab.register(modEventBus);
 
 

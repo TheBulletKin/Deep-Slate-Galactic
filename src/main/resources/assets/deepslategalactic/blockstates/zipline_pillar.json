@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "deepslategalactic:block/zipline_pillar",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "deepslategalactic:block/zipline_pillar",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "deepslategalactic:block/zipline_pillar",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "deepslategalactic:block/zipline_pillar",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "deepslategalactic:block/zipline_pillar"
+    },
+    "facing=west": {
+      "model": "deepslategalactic:block/zipline_pillar",
+      "x": 90,
+      "y": 270
+    }
+  }
+}
