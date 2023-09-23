@@ -1,7 +1,10 @@
 package com.thebulletkin.deepslategalactic.event;
 
 import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
+import com.thebulletkin.deepslategalactic.entity.DSGEntities;
+import com.thebulletkin.deepslategalactic.entity.client.ZiplineWinchRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -33,11 +36,10 @@ public class DSGClientEvents {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            //event.enqueueWork(() -> {
-                //ModItemProperties.addCustomItemProperties();
+            event.enqueueWork(() -> {
 
-                //MenuScreens.register(ModMenuTypes.GEM_EMPOWERING_MENU.get(), GemEmpoweringStationScreen::new);
-            //});
+                    EntityRenderers.register(DSGEntities.ZIPLINE_WINCH.get(), ZiplineWinchRenderer::new);
+            });
         }
 
 
