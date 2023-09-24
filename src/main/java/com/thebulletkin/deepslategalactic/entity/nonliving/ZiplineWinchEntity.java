@@ -16,7 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class ZiplineWinchEntity extends Entity{
+public class ZiplineWinchEntity extends Entity implements PlayerRideable {
 
 
     public ZiplineWinchEntity(EntityType<?> pEntityType, Level pLevel) {
@@ -24,6 +24,7 @@ public class ZiplineWinchEntity extends Entity{
     }
 
     public ZiplineWinchEntity(Level pLevel, double pX, double pY, double pZ) {
+
         this(DSGEntities.ZIPLINE_WINCH.get(), pLevel);
         this.setPos(pX, pY, pZ);
         this.xo = pX;
@@ -37,35 +38,56 @@ public class ZiplineWinchEntity extends Entity{
     }
 
 
-
     @Override
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
         DeepSlateGalactic.LOGGER.info("interacted with");
-        if (!pPlayer.isShiftKeyDown()) {
-            if (pPlayer.getVehicle() != this) {
-                if (!level().isClientSide) {
-                    pPlayer.startRiding(this);
-                }
-            }
-            return InteractionResult.SUCCESS;
+
+        if (!level().isClientSide()) {
+            pPlayer.startRiding(this);
         }
-        return InteractionResult.FAIL;
+
+        return InteractionResult.SUCCESS;
 
     }
-
-
-
-    protected void beginRiding(Player pPlayer){
-        pPlayer.setYRot(this.getYRot());
-        pPlayer.setXRot(this.getXRot());
-        pPlayer.startRiding(this);
-    }
-
 
 
     @Override
     public double getPassengersRidingOffset() {
         return 0D;
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return ((LivingEntity) this.getFirstPassenger());
+    }
+
+    @Override
+    public Vec3 getDismountLocationForPassenger(LivingEntity pLivingEntity) {
+        Direction direction = this.getMotionDirection();
+        if (direction.getAxis() != Direction.Axis.Y) {
+            int[][] offsets = DismountHelper.offsetsForDirection(direction);
+            BlockPos blockpos = this.blockPosition();
+            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+            for (Pose pose : pLivingEntity.getDismountPoses()) {
+                AABB aabb = pLivingEntity.getLocalBoundsForPose(pose);
+
+                for (int[] offset : offsets) {
+                    blockpos$mutableblockpos.set(blockpos.getX() + offset[0], blockpos.getY(), blockpos.getZ() + offset[1]);
+                    double d0 = this.level().getBlockFloorHeight(blockpos$mutableblockpos);
+                    if (DismountHelper.isBlockFloorValid(d0)) {
+                        Vec3 vec3 = Vec3.upFromBottomCenterOf(blockpos$mutableblockpos, d0);
+                        if (DismountHelper.canDismountTo(this.level(), pLivingEntity, aabb.move(vec3))) {
+                            pLivingEntity.setPose(pose);
+                            return vec3;
+                        }
+                    }
+                }
+            }
+        }
+
+        return super.getDismountLocationForPassenger(pLivingEntity);
     }
 
     @Override
@@ -82,20 +104,6 @@ public class ZiplineWinchEntity extends Entity{
     protected void addAdditionalSaveData(CompoundTag pCompound) {
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

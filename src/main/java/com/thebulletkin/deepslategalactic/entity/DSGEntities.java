@@ -19,7 +19,7 @@ public class DSGEntities {
 
     public static final RegistryObject<EntityType<ZiplineWinchEntity>> ZIPLINE_WINCH =
             ENTITY_TYPES.register("zipline_winch_entity", () -> EntityType.Builder.<ZiplineWinchEntity>of(ZiplineWinchEntity::new, MobCategory.MISC)
-                    .sized(1f, 1f).clientTrackingRange(8).build("zipline_winch_entity"));
+                    .sized(1f, 1f).build("zipline_winch_entity"));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
