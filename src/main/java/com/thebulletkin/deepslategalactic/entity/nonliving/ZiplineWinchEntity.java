@@ -32,7 +32,7 @@ public class ZiplineWinchEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        DeepSlateGalactic.LOGGER.info("interacted with");
+
 
         if (!level().isClientSide()) {
             pPlayer.startRiding(this);
@@ -43,7 +43,7 @@ public class ZiplineWinchEntity extends Entity {
 
     @Override
     public boolean isPickable() {
-        return true;
+        return !this.isRemoved();
     }
 
     @Override
