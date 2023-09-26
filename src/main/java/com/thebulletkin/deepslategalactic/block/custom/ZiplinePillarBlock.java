@@ -1,5 +1,7 @@
 package com.thebulletkin.deepslategalactic.block.custom;
 
+import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
+import com.thebulletkin.deepslategalactic.block.entity.ZiplinePillarBlockEntity;
 import com.thebulletkin.deepslategalactic.entity.nonliving.ZiplineWinchEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -54,6 +57,11 @@ public class ZiplinePillarBlock extends RodBlock {
 
             ZiplineWinchEntity ziplinewinchentity = ZiplineWinchEntity.createWinch(pLevel, pPos.getX(), pPos.getY(), pPos.getZ());
             pLevel.addFreshEntity(ziplinewinchentity);
+
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            if (blockEntity instanceof ZiplinePillarBlockEntity ziplinePillarBlockEntity){
+            }
+
             return InteractionResult.SUCCESS;
         }
         else {
