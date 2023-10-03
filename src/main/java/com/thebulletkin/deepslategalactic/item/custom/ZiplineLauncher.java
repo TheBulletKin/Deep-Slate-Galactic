@@ -1,8 +1,8 @@
 package com.thebulletkin.deepslategalactic.item.custom;
 
-import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
 import com.thebulletkin.deepslategalactic.block.DSGBlocks;
 import com.thebulletkin.deepslategalactic.block.custom.ZiplinePillarBlock;
+import com.thebulletkin.deepslategalactic.block.entity.ZiplinePillarBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -13,9 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RodBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,17 +39,24 @@ public class ZiplineLauncher extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-        if(!pLevel.isClientSide()) {
+        if(!pLevel.isClientSide() && pUsedHand == InteractionHand.MAIN_HAND) {
 
-            targetBlock = CastRay(pLevel, pPlayer, ClipContext.Fluid.NONE);
+            targetBlock = castRay(pLevel, pPlayer, ClipContext.Fluid.NONE);
             playerOnPos = pPlayer.getOnPos();
-            if (GroundBelowPlayerIsSuitable(pLevel, playerOnPos) && TargetSurfaceIsSuitable(pLevel)) {
-                PlacePillarOnPlayer(pLevel, playerOnPos);
+            if (groundBelowPlayerIsSuitable(pLevel, playerOnPos) && targetSurfaceIsSuitable(pLevel)) {
 
-                DeepSlateGalactic.LOGGER.info("Can place on player? " + GroundBelowPlayerIsSuitable(pLevel, playerOnPos));
-                DeepSlateGalactic.LOGGER.info("Can place on target? " + TargetSurfaceIsSuitable(pLevel));
+                placePillarOnPlayer(pLevel, playerOnPos);
+                placePillarOnTarget(pLevel, getPosToPlacePillar());
+                BlockEntity blockEntity = pLevel.getBlockEntity(playerOnPos.above());
+                if (blockEntity instanceof ZiplinePillarBlockEntity ){
+                    ((ZiplinePillarBlockEntity)blockEntity).setConnectedPillarPos(getPosToPlacePillar());
+                }
 
-                PlacePillarOnTarget(pLevel, GetPosToPlacePillar());
+                BlockEntity blockEntity2 = pLevel.getBlockEntity(getPosToPlacePillar());
+                if (blockEntity2 instanceof ZiplinePillarBlockEntity ){
+                    ((ZiplinePillarBlockEntity)blockEntity2).setConnectedPillarPos(playerOnPos.above());
+                }
+
                 return InteractionResultHolder.success(itemStack);
             } else {
                 return InteractionResultHolder.pass(itemStack);
@@ -64,7 +69,7 @@ public class ZiplineLauncher extends Item {
         
     }
 
-    private BlockPos GetPosToPlacePillar() {
+    private BlockPos getPosToPlacePillar() {
         return switch (targetBlock.getDirection()) {
             case UP -> targetBlock.getBlockPos().above();
             case EAST -> targetBlock.getBlockPos().east();
@@ -75,12 +80,12 @@ public class ZiplineLauncher extends Item {
         };
     }
 
-    private void PlacePillarOnTarget(Level pLevel, BlockPos blockPos) {
+    private void placePillarOnTarget(Level pLevel, BlockPos blockPos) {
 
         pLevel.setBlock(blockPos, ZiplinePillarBlockState.setValue(ZiplinePillarBlock.FACING, targetBlock.getDirection()), 3);
     }
 
-    private void PlacePillarOnPlayer(Level pLevel, BlockPos playerOnPos) {
+    private void placePillarOnPlayer(Level pLevel, BlockPos playerOnPos) {
         pLevel.setBlock(playerOnPos.above(), ZiplinePillarBlockState, 3);
     }
 
@@ -88,19 +93,19 @@ public class ZiplineLauncher extends Item {
         return false;
     }
 
-    private boolean TargetSurfaceIsSuitable(Level pLevel) {
+    private boolean targetSurfaceIsSuitable(Level pLevel) {
         BlockPos targetBlockPos = targetBlock.getBlockPos();
         BlockState blockHit = pLevel.getBlockState(targetBlockPos);
         return blockHit.isFaceSturdy(pLevel, targetBlockPos, targetBlock.getDirection());
     }
 
-    private boolean GroundBelowPlayerIsSuitable(Level pLevel, BlockPos playerOnPos) {
+    private boolean groundBelowPlayerIsSuitable(Level pLevel, BlockPos playerOnPos) {
 
         BlockState blockStateBelowPlayer = pLevel.getBlockState(playerOnPos);        
         return blockStateBelowPlayer.isFaceSturdy(pLevel, playerOnPos, Direction.UP);
     }
 
-    protected static BlockHitResult CastRay(Level pLevel, Player pPlayer, ClipContext.Fluid pFluidMode) {
+    protected static BlockHitResult castRay(Level pLevel, Player pPlayer, ClipContext.Fluid pFluidMode) {
         double range = 30;
 
         float f = pPlayer.getXRot();

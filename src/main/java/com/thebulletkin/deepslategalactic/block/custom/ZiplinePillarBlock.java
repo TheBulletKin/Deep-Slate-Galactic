@@ -23,12 +23,26 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class ZiplinePillarBlock extends RodBlock {
+import java.sql.PreparedStatement;
+
+public class ZiplinePillarBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     protected static final VoxelShape SHAPE = Block.box(6D, 0D, 6D, 10D, 32D, 10D);
 
     public ZiplinePillarBlock(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new ZiplinePillarBlockEntity(pPos, pState);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.MODEL;
     }
 
     @Override
@@ -60,6 +74,8 @@ public class ZiplinePillarBlock extends RodBlock {
 
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof ZiplinePillarBlockEntity ziplinePillarBlockEntity){
+
+                pPlayer.teleportTo(ziplinePillarBlockEntity.getConnectedPillarPos().getX(), ziplinePillarBlockEntity.getConnectedPillarPos().getY(), ziplinePillarBlockEntity.getConnectedPillarPos().getZ());
             }
 
             return InteractionResult.SUCCESS;
@@ -67,5 +83,15 @@ public class ZiplinePillarBlock extends RodBlock {
         else {
             return InteractionResult.FAIL;
         }
+    }
+
+    @Override
+    public BlockState rotate(BlockState pState, Rotation pRotation) {
+        return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState pState, Mirror pMirror) {
+        return pState.setValue(FACING, pMirror.mirror(pState.getValue(FACING)));
     }
 }

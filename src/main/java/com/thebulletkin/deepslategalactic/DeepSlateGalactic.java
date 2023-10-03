@@ -2,6 +2,7 @@ package com.thebulletkin.deepslategalactic;
 
 import com.mojang.logging.LogUtils;
 import com.thebulletkin.deepslategalactic.block.DSGBlocks;
+import com.thebulletkin.deepslategalactic.block.entity.DSGBlockEntities;
 import com.thebulletkin.deepslategalactic.entity.DSGEntities;
 import com.thebulletkin.deepslategalactic.item.DSGItems;
 import net.minecraft.client.Minecraft;
@@ -56,6 +57,7 @@ public class DeepSlateGalactic
         DSGBlocks.register(modEventBus);
         DSGItems.register(modEventBus);
         DSGEntities.register(modEventBus);
+        DSGBlockEntities.register(modEventBus);
 
         DSGCreativeModeTab.register(modEventBus);
 
