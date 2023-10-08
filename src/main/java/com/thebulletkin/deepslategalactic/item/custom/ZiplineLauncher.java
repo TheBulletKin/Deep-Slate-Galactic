@@ -106,7 +106,7 @@ public class ZiplineLauncher extends Item {
     }
 
     protected static BlockHitResult castRay(Level pLevel, Player pPlayer, ClipContext.Fluid pFluidMode) {
-        double range = 30;
+        double range = 50;
 
         float f = pPlayer.getXRot();
         float f1 = pPlayer.getYRot();

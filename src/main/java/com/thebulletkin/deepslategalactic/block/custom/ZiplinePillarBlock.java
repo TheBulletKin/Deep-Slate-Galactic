@@ -63,21 +63,17 @@ public class ZiplinePillarBlock extends BaseEntityBlock {
         pBuilder.add(FACING);
     }
 
-
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-
-        if (!pLevel.isClientSide() && pHand == InteractionHand.MAIN_HAND){
-
-            ZiplineWinchEntity ziplinewinchentity = ZiplineWinchEntity.createWinch(pLevel, pPos.getX(), pPos.getY(), pPos.getZ());
-            pLevel.addFreshEntity(ziplinewinchentity);
-
+        if (pHand == InteractionHand.MAIN_HAND){
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof ZiplinePillarBlockEntity ziplinePillarBlockEntity){
-
-                pPlayer.teleportTo(ziplinePillarBlockEntity.getConnectedPillarPos().getX(), ziplinePillarBlockEntity.getConnectedPillarPos().getY(), ziplinePillarBlockEntity.getConnectedPillarPos().getZ());
+                ZiplineWinchEntity ziplinewinchentity = ZiplineWinchEntity.createWinch(pLevel, pPos.getX() + 0.5, pPos.getY() + 1.2, pPos.getZ() + 0.5);
+                ziplinewinchentity.setStartPos(pPos);
+                ziplinewinchentity.setDestinationPos(ziplinePillarBlockEntity.getConnectedPillarPos());
+                pLevel.addFreshEntity(ziplinewinchentity);
+                pPlayer.startRiding(ziplinewinchentity);
             }
-
             return InteractionResult.SUCCESS;
         }
         else {
