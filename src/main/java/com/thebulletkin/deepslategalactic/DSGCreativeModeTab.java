@@ -20,6 +20,7 @@ public class DSGCreativeModeTab {
                         .displayItems((displayParameters, output) -> {
 
                             output.accept(DSGItems.ZIPLINE_LAUNCHER.get());
+                            output.accept(DSGItems.PLATFORM_GUN.get());
 
                             output.accept(DSGBlocks.ZIPLINE_PILLAR.get());
                         })

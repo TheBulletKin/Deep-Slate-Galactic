@@ -1,6 +1,7 @@
 package com.thebulletkin.deepslategalactic.item;
 
 import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
+import com.thebulletkin.deepslategalactic.item.custom.PlatformGun;
 import com.thebulletkin.deepslategalactic.item.custom.ZiplineLauncher;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
@@ -19,6 +20,8 @@ public class DSGItems {
 
         public static final RegistryObject<Item> ZIPLINE_LAUNCHER = ITEMS.register("zipline_launcher",
             () -> new ZiplineLauncher(new Item.Properties()));
+        public static final RegistryObject<Item> PLATFORM_GUN = ITEMS.register("platform_gun",
+            () -> new PlatformGun(new Item.Properties()));
 
 
         public static void register(IEventBus eventbus){

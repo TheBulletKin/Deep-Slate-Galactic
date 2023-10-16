@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "" : {
+      "model" : "deepslategalactic:block/platform_block"
+    }
+  }
+}

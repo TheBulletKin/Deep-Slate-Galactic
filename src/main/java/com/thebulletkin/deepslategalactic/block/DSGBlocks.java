@@ -1,6 +1,7 @@
 package com.thebulletkin.deepslategalactic.block;
 
 import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
+import com.thebulletkin.deepslategalactic.block.custom.PlatformBlock;
 import com.thebulletkin.deepslategalactic.block.custom.ZiplinePillarBlock;
 import com.thebulletkin.deepslategalactic.item.DSGItems;
 import net.minecraft.world.item.BlockItem;
@@ -23,6 +24,8 @@ public class DSGBlocks {
     public static final RegistryObject<Block> ZIPLINE_PILLAR = registerBlock("zipline_pillar",
             () -> new ZiplinePillarBlock(BlockBehaviour.Properties.copy(Blocks.LIGHTNING_ROD).noCollission().noOcclusion()));
 
+    public static final RegistryObject<Block> PLATFORM_BLOCK = registerBlock("platform_block",
+            () -> new PlatformBlock(BlockBehaviour.Properties.copy(Blocks.SPONGE)));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
@@ -30,7 +33,6 @@ public class DSGBlocks {
         registerBlockItem(name, toReturn);
         return toReturn;
     }
-
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){
         return DSGItems.ITEMS.register(name, () -> new BlockItem(block.get(),

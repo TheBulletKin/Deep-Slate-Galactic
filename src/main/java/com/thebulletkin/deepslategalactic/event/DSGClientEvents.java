@@ -2,6 +2,7 @@ package com.thebulletkin.deepslategalactic.event;
 
 import com.thebulletkin.deepslategalactic.DeepSlateGalactic;
 import com.thebulletkin.deepslategalactic.entity.DSGEntities;
+import com.thebulletkin.deepslategalactic.entity.client.PlatformProjectileRenderer;
 import com.thebulletkin.deepslategalactic.entity.client.ZiplineWinchRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -20,7 +21,7 @@ public class DSGClientEvents {
 
         @SubscribeEvent
         public static void doSetup(FMLClientSetupEvent event) {
-            //EntityRenderers.register(ModEntities.MAKESHIFT_FLARE.get(), MakeshiftFlareRenderer::new);
+            EntityRenderers.register(DSGEntities.PLATFORM_PROJECTILE.get(), PlatformProjectileRenderer::new);
         }
 
         @SubscribeEvent
